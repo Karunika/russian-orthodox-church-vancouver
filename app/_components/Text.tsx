@@ -1,18 +1,19 @@
 'use client';
 
 import { ReactNode } from 'react';
+import { theme } from 'antd';
 import AntText from 'antd/es/typography/Text';
 import AntTitle from 'antd/es/typography/Title';
 
 interface TextProps {
     children: ReactNode;
     coro?: boolean; // Use coro font if true
-    primary?: boolean; // Primary color if true, secondary otherwise
+    primary?: boolean; // Use theme primary color if true
     ls?: boolean; // Letter spacing
     mb?: number; // Margin bottom
     mt?: number; // Margin top
     center?: boolean;
-    sx?: { [key: string]: any };
+    sx?: React.CSSProperties; // Allow style overrides
 }
 
 export const Title = ({
@@ -27,15 +28,17 @@ export const Title = ({
     sx = {},
 }: Readonly<
     {
-        level?: 3 | 1 | 5 | 2 | 4;
+        level?: 1 | 2 | 3 | 4 | 5;
     } & TextProps
 >) => {
+    const { token } = theme.useToken();
+
     return (
         <AntTitle
             level={level}
             className={coro ? 'font-coro' : 'font-nuni'}
-            type={primary ? 'primary' : 'secondary'}
             style={{
+                color: primary ? token.colorPrimary : token.colorText,
                 textAlign: center ? 'center' : 'left',
                 letterSpacing: ls ? '0.2em' : 0,
                 marginBottom: mb,
@@ -59,11 +62,13 @@ export const Text = ({
     center = false,
     sx = {},
 }: Readonly<TextProps>) => {
+    const { token } = theme.useToken();
+
     return (
         <AntText
             className={coro ? 'font-coro' : 'font-nuni'}
-            type={primary ? 'primary' : 'secondary'}
             style={{
+                color: primary ? token.colorPrimary : token.colorText,
                 textAlign: center ? 'center' : 'left',
                 letterSpacing: ls ? '0.05em' : 0,
                 marginBottom: mb,
