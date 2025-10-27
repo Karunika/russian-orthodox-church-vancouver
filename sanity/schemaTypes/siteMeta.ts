@@ -95,7 +95,9 @@ export default defineType({
                                             'Saturday',
                                             'Sunday',
                                         ];
-                                        return arr?.every((day) => validDays.includes(day)) ? true : 'Invalid weekday';
+                                        return arr?.every((day) => validDays.includes(day as any as string))
+                                            ? true
+                                            : 'Invalid weekday';
                                     }),
                         }),
                         defineField({
@@ -248,5 +250,5 @@ export default defineType({
             subtitle: 'location',
         },
     },
-    __experimental_actions: ['update' /* 'create', 'delete' */],
+    // __experimental_actions: ['update' /* 'create', 'delete' */],
 });
