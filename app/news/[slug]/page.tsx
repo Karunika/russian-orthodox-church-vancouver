@@ -11,13 +11,30 @@ interface NewsItem {
     body?: any;
 }
 
-export default async function NewsDetailPage({ params }: { params: { slug: string } }) {
+interface SlugParam {
+    slug: string;
+}
+
+export async function generateStaticParams(): Promise<SlugParam[]> {
+    const query = `*[_type == "news" && defined(slug.current)]{
+        "slug": slug.current
+    }`;
+    const slugs: SlugParam[] = await client.fetch(query);
+    return slugs;
+}
+
+export default async function NewsDetailPage({ params }: { params: SlugParam }) {
+    if (!params?.slug) {
+        return <div>Missing slug parameter.</div>;
+    }
+
     const query = `*[_type == "news" && slug.current == $slug][0]{
         _id,
         title,
         mainImage,
         body
     }`;
+
     const newsItem: NewsItem = await client.fetch(query, { slug: params.slug });
 
     if (!newsItem) {
@@ -34,7 +51,7 @@ export default async function NewsDetailPage({ params }: { params: { slug: strin
                     <img
                         src={urlFor(newsItem.mainImage).width(1000).url()}
                         alt={newsItem.title}
-                        style={{ width: '100%', borderRadius: 8, marginBottom: 24 }}
+                        style={{ width: '100%', borderRadius: 8, marginBottom: 24, objectFit: 'cover' }}
                     />
                 )}
                 <Paragraph>
