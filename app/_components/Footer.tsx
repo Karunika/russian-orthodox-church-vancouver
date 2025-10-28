@@ -77,8 +77,8 @@ const Footer = () => {
                             DIVINE SERVICE SCHEDULE
                         </Title>
                         <Flex vertical gap={10}>
-                            {data?.divineSchedule?.map((entity) => (
-                                <Text ls sx={{ color }}>
+                            {data?.divineSchedule?.map((entity, i) => (
+                                <Text ls sx={{ color }} key={i}>
                                     Every {entity?.weekdays?.join(', ')}
                                     <br />
                                     {entity?.timings?.join(', ')} - {entity?.title}

@@ -1,10 +1,10 @@
 'use client';
 
 import { CSSProperties, useEffect, useState } from 'react';
-import { Carousel as AntCarousel, Spin, Typography } from 'antd';
+import { Carousel as AntCarousel, Spin, Typography, Flex, Button } from 'antd';
 import { client, urlFor } from '@/lib/sanity';
 
-const { Title, Paragraph } = Typography;
+import { Text, Title } from './Text';
 
 interface Slide {
     _id: string;
@@ -28,10 +28,12 @@ const textOverlayStyle: CSSProperties = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    color: '#fff',
-    textShadow: '0 2px 8px rgba(0,0,0,0.5)',
     maxWidth: '80%',
 };
+
+function capitalizeFirstLetter(val: string): string {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
 
 const Carousel: React.FC = () => {
     const [slides, setSlides] = useState<Slide[]>([]);
@@ -61,9 +63,9 @@ const Carousel: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
+            <Flex>
                 <Spin size="large" />
-            </div>
+            </Flex>
         );
     }
 
@@ -72,7 +74,7 @@ const Carousel: React.FC = () => {
     }
 
     return (
-        <AntCarousel autoplay autoplaySpeed={5000} fade>
+        <AntCarousel autoplay autoplaySpeed={5000} fade arrows>
             {slides.map((slide) => (
                 <div key={slide._id}>
                     <div style={contentStyle}>
@@ -91,28 +93,52 @@ const Carousel: React.FC = () => {
                                 }}
                             />
                         )}
-                        <div style={textOverlayStyle}>
-                            <Title level={1} style={{ color: 'white' }}>
+
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                background:
+                                    'linear-gradient(to bottom right, rgba(120, 50, 50, 0.9), rgba(40, 117, 109, 0.5))',
+                                zIndex: 1,
+                            }}
+                        />
+
+                        <div style={{ ...textOverlayStyle, zIndex: 2 }}>
+                            <Title
+                                coro
+                                center
+                                level={1}
+                                sx={{
+                                    color: '#ffffffee',
+                                    lineHeight: 1.4,
+                                    fontSize: '48px',
+                                }}
+                            >
                                 {slide.title}
                             </Title>
-                            {slide.subtitle && (
-                                <Paragraph style={{ color: 'white', fontSize: '1.2rem' }}>{slide.subtitle}</Paragraph>
-                            )}
                             {slide.link && (
-                                <a
-                                    href={slide.link}
+                                <Button
+                                    color="default"
+                                    type="primary"
+                                    variant="outlined"
+                                    size="large"
+                                    onClick={() => {
+                                        window.open(slide.link, '_blank');
+                                    }}
                                     style={{
-                                        display: 'inline-block',
-                                        marginTop: '1rem',
-                                        padding: '0.5rem 1.5rem',
-                                        backgroundColor: '#1890ff',
+                                        borderRadius: 0,
+                                        marginTop: 40,
+                                        background: 'transparent',
                                         color: 'white',
-                                        borderRadius: '6px',
-                                        textDecoration: 'none',
+                                        padding: 30,
                                     }}
                                 >
-                                    Learn More
-                                </a>
+                                    LEARN MORE
+                                </Button>
                             )}
                         </div>
                     </div>

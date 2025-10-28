@@ -4,9 +4,14 @@
     font-family: 'Cormorant Garamond', serif;
     font-optical-sizing: auto;
     font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-optical-sizing: none;
 }
 
 .font-nuni {
     font-family: 'Quicksand', sans-serif;
     font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
